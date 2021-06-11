@@ -21,7 +21,17 @@ fn main() {
         args.path.as_path().to_str().unwrap()
     );
 
-    let content = std::fs::read_to_string(&args.path).expect("could not read file");
+    let result = std::fs::read_to_string(&args.path);
+
+    // The patter matching is equivalent to:
+    // let content = result.unwrap();
+    // @see documentation during autocompletion in VSCode
+    let content = match result {
+        Ok(content) => content,
+        Err(error) => {
+            panic!("Can't deal with {}, just exit here", error);
+        }
+    };
 
     for line in content.lines() {
         if line.contains(&args.pattern) {
