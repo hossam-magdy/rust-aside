@@ -1,11 +1,21 @@
-use ferris_says::say; // from the previous step
-use std::io::{stdout, BufWriter};
+use structopt::StructOpt;
+
+/// Search for a pattern in a file and display the lines that contain it.
+#[derive(StructOpt)]
+struct Cli {
+    /// The pattern to look for
+    pattern: String,
+    /// The path to the file to read
+    #[structopt(parse(from_os_str))]
+    path: std::path::PathBuf,
+}
 
 fn main() {
-    let stdout = stdout();
-    let message = String::from("Hello fellow Rustaceans!");
-    let width = message.chars().count();
+    let args = Cli::from_args();
 
-    let mut writer = BufWriter::new(stdout.lock());
-    say(message.as_bytes(), width, &mut writer).unwrap();
+    println!(
+        "Args:\n- string: {}\n- file: {}",
+        args.pattern,
+        args.path.as_path().to_str().unwrap()
+    );
 }
