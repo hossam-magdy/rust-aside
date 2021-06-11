@@ -21,17 +21,7 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
         args.path.as_path().to_str().unwrap()
     );
 
-    let result = std::fs::read_to_string(&args.path);
-
-    // The pattern matching, returning Err in error arm, is equivalent to (notice the question mark at the end):
-    // let content = result?;
-    // @see documentation during autocompletion in VSCode
-    let content = match result {
-        Ok(content) => content,
-        Err(error) => {
-            return Err(error.into());
-        }
-    };
+    let content = std::fs::read_to_string(&args.path)?;
 
     for line in content.lines() {
         if line.contains(&args.pattern) {
