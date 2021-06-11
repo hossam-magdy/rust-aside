@@ -1,4 +1,5 @@
 use anyhow::{Context, Result};
+use log::info;
 use structopt::StructOpt;
 
 /// Search for a pattern in a file and display the lines that contain it.
@@ -14,11 +15,13 @@ struct Cli {
 // Now you can run: `cargo run foo test.txt`
 // Or `cargo build --release` then `target/release/rust-workshop foo test.txt`
 fn main() -> Result<()> {
+    env_logger::init();
+
     let args = Cli::from_args();
     let pattern = args.pattern;
     let path = args.path.as_path().to_str().unwrap();
 
-    println!("Args: {{ string: \"{}\", file: \"{}\" }}", pattern, path);
+    info!("Args: {{ string: \"{}\", file: \"{}\" }}", pattern, path);
 
     let content = std::fs::read_to_string(&args.path)
         .with_context(|| format!("Could not read he file \"{}\"", path))?;
