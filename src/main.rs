@@ -12,7 +12,7 @@ struct Cli {
 
 // Now you can run: `cargo run foo test.txt`
 // Or `cargo build --release` then `target/release/rust-workshop foo test.txt`
-fn main() {
+fn main() -> Result<(), Box<dyn std::error::Error>> {
     let args = Cli::from_args();
 
     println!(
@@ -23,13 +23,13 @@ fn main() {
 
     let result = std::fs::read_to_string(&args.path);
 
-    // The patter matching is equivalent to:
-    // let content = result.unwrap();
+    // The pattern matching, returning Err in error arm, is equivalent to (notice the question mark at the end):
+    // let content = result?;
     // @see documentation during autocompletion in VSCode
     let content = match result {
         Ok(content) => content,
         Err(error) => {
-            panic!("Can't deal with {}, just exit here", error);
+            return Err(error.into());
         }
     };
 
@@ -38,4 +38,6 @@ fn main() {
             println!("{}", line);
         }
     }
+
+    Ok(())
 }
