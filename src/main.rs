@@ -1,3 +1,5 @@
+use rust_workshop::p3_reverse_string::reverse_string2;
+
 /*
 use anyhow::{Context, Result};
 use log::info;
@@ -37,20 +39,25 @@ fn mainX() -> Result<()> {
 }
 */
 
+// fn main() {
+//     println!(
+//         "output:   {:?}\nexpected: {:?}\n",
+//         rust_workshop::p2_two_sum::two_sum2(vec![2, 7, 11, 15], 9),
+//         vec![0, 1]
+//     );
+//     println!(
+//         "output:   {:?}\nexpected: {:?}\n",
+//         rust_workshop::p2_two_sum::two_sum2(vec![3, 2, 4], 6),
+//         vec![1, 2]
+//     );
+//     println!(
+//         "output:   {:?}\nexpected: {:?}\n",
+//         rust_workshop::p2_two_sum::two_sum2(vec![3, 3], 6),
+//         vec![0, 1]
+//     );
+// }
+
 fn main() {
-    println!(
-        "output:   {:?}\nexpected: {:?}\n",
-        rust_workshop::p2_two_sum::two_sum2(vec![2, 7, 11, 15], 9),
-        vec![0, 1]
-    );
-    println!(
-        "output:   {:?}\nexpected: {:?}\n",
-        rust_workshop::p2_two_sum::two_sum2(vec![3, 2, 4], 6),
-        vec![1, 2]
-    );
-    println!(
-        "output:   {:?}\nexpected: {:?}\n",
-        rust_workshop::p2_two_sum::two_sum2(vec![3, 3], 6),
-        vec![0, 1]
-    );
+    // println!("{}", reverse_string1("abc"));
+    println!("{}", reverse_string2("abc"));
 }
