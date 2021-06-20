@@ -1,4 +1,4 @@
-use rust_workshop::p3_reverse_string::reverse_string2;
+use rust_workshop::p3_reverse_string::{reverse_string1, reverse_string2, reverse_string3};
 
 /*
 use anyhow::{Context, Result};
@@ -58,6 +58,7 @@ fn mainX() -> Result<()> {
 // }
 
 fn main() {
-    // println!("{}", reverse_string1("abc"));
+    println!("{}", reverse_string1("abc"));
     println!("{}", reverse_string2("abc"));
+    println!("{}", reverse_string3("abc"));
 }

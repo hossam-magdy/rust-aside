@@ -7,7 +7,6 @@ fn main() {
 */
 
 pub fn reverse_string1(s: &str) -> String {
-    // let str = s.to_string();
     let len = s.len();
     let mut out = String::new();
     for i in (0..len).rev() {
@@ -26,4 +25,8 @@ pub fn reverse_string2(s: &str) -> String {
     }
 
     return out;
+}
+
+pub fn reverse_string3(s: &str) -> String {
+    return s.chars().rev().collect();
 }
