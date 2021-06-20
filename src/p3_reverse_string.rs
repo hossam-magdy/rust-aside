@@ -3,6 +3,7 @@
 fn main() {
     println!("{}", reverse_string1("abc"));
     println!("{}", reverse_string2("abc"));
+    println!("{}", reverse_string3("abc"));
 }
 */
 
