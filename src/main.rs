@@ -1,8 +1,9 @@
-use rust_workshop::p4_merge_sorted_arrays::merge_sorted_arrays;
+use rust_workshop::p5_move_zeros::move_zeroes;
 
 fn main() {
     println!(
-        "{:?}\n[0, 3, 4, 4, 6, 30, 31]",
-        merge_sorted_arrays(&[0, 3, 4, 31], &[4, 6, 30])
+        "{:?}\n[1, 3, 12, 0, 0]",
+        move_zeroes(&mut vec![0, 1, 0, 3, 12])
     );
+    println!("{:?}\n[0]", move_zeroes(&mut vec![0]));
 }
