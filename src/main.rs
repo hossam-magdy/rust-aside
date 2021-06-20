@@ -1,3 +1,4 @@
+/*
 use anyhow::{Context, Result};
 use log::info;
 use structopt::StructOpt;
@@ -14,7 +15,7 @@ struct Cli {
 
 // Now you can run: `cargo run foo test.txt`
 // Or `cargo build --release` then `target/release/rust-workshop foo test.txt`
-fn main() -> Result<()> {
+fn mainX() -> Result<()> {
     env_logger::init();
 
     let args = Cli::from_args();
@@ -33,4 +34,23 @@ fn main() -> Result<()> {
     }
 
     Ok(())
+}
+*/
+
+fn main() {
+    println!(
+        "output:   {:?}\nexpected: {:?}\n",
+        rust_workshop::p2_two_sum::two_sum2(vec![2, 7, 11, 15], 9),
+        vec![0, 1]
+    );
+    println!(
+        "output:   {:?}\nexpected: {:?}\n",
+        rust_workshop::p2_two_sum::two_sum2(vec![3, 2, 4], 6),
+        vec![1, 2]
+    );
+    println!(
+        "output:   {:?}\nexpected: {:?}\n",
+        rust_workshop::p2_two_sum::two_sum2(vec![3, 3], 6),
+        vec![0, 1]
+    );
 }
