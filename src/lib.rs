@@ -4,6 +4,7 @@ pub mod p3_reverse_string;
 pub mod p4_merge_sorted_arrays;
 pub mod p5_move_zeros;
 pub mod p6_contains_duplicate;
+pub mod p7_rotate_array;
 
 pub fn answer() -> i32 {
     return 42;
