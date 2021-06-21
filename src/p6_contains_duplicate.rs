@@ -1,3 +1,7 @@
+// @see: https://leetcode.com/problems/contains-duplicate/description/
+// Given an integer array nums, return true if any value appears at least twice in the array, and return false if every element is distinct.
+
+/*
 use rust_workshop::p6_contains_duplicate::contains_duplicate;
 
 fn main() {
@@ -15,4 +19,18 @@ fn main() {
     );
     println!("{:?}", contains_duplicate(vec![]));
     println!("{:?}", contains_duplicate(vec![1, 1]));
+}
+*/
+
+use std::collections::HashSet;
+
+pub fn contains_duplicate(nums: Vec<i32>) -> bool {
+    let mut set = HashSet::new();
+    for n in nums {
+        if set.contains(&n) {
+            return true;
+        }
+        set.insert(n);
+    }
+    return false;
 }
