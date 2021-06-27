@@ -6,6 +6,7 @@ pub mod p5_move_zeros;
 pub mod p6_contains_duplicate;
 pub mod p7_rotate_array;
 pub mod p8_max_sub_array;
+pub mod p9_first_recurring_char;
 
 pub fn answer() -> i32 {
     return 42;

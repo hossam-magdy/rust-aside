@@ -11,10 +11,7 @@ fn main() {
 
 pub fn contains_common_number1(s1: &[i32], s2: &[i32]) -> bool {
     for i in 0..s1.len() {
-        // in s1 {
         for j in 0..s2.len() {
-            // in s1 {
-            // for j in s2 {
             if s1[i] == s2[j] {
                 return true;
             }

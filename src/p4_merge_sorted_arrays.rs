@@ -19,7 +19,6 @@ pub fn merge_sorted_arrays(arr1: &[i32], arr2: &[i32]) -> Vec<i32> {
             arr_merged.push(arr1[i1]);
             i1 = i1 + 1;
         } else {
-            // if (i1 >= len1 && i2 < len2) || arr1[i1] > arr2[i2] {
             arr_merged.push(arr2[i2]);
             i2 = i2 + 1;
         }
