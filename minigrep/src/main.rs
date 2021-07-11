@@ -1,8 +1,8 @@
 // cargo run -q foo test.txt
 
-use std::{env, fs, process};
+use std::{env, error::Error, fs, process};
 
-fn main() -> Result<(), std::io::Error> {
+fn main() {
     let args: Vec<String> = env::args().collect();
 
     let config = Config::new(&args).unwrap_or_else(|error| {
@@ -10,6 +10,16 @@ fn main() -> Result<(), std::io::Error> {
         process::exit(1);
     });
 
+    println!("Searching for {}", config.query);
+    println!("In file {}", config.filename);
+
+    if let Err(e) = run(config) {
+        println!("Application error: {}", e);
+        process::exit(1);
+    }
+}
+
+fn run(config: Config) -> Result<(), Box<dyn Error>> {
     let file_content = fs::read_to_string(config.filename)?;
     let mut i = 0;
 
