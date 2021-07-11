@@ -7,6 +7,8 @@ pub mod p6_contains_duplicate;
 pub mod p7_rotate_array;
 pub mod p8_max_sub_array;
 pub mod p9_first_recurring_char;
+// pub mod p10_LinkedList;
+// pub mod p10_LinkedList2;
 
 pub fn answer() -> i32 {
     return 42;
