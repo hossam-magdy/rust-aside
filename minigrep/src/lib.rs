@@ -7,17 +7,19 @@ pub struct Config<'a> {
 
 impl<'a> Config<'a> {
     pub fn new(args: &[String]) -> Result<Config, &str> {
-        if args.len() < 3 {
-            return Err("not enough arguments");
+        if args.len() < 2 {
+            return Err(
+                "Expected \"query\" as first argument, and \"filename\" as second argument",
+            );
         }
 
         let query = args
             .get(1)
-            .expect("Search string is required as first argument");
+            .ok_or("Could not extract Search query from the first argument")?;
 
         let filename = args
             .get(2)
-            .expect("File name is required as second argument");
+            .ok_or("Could not extract Filename from the second argument")?;
 
         Ok(Config { query, filename })
     }
