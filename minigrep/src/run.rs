@@ -4,7 +4,11 @@ use std::{error::Error, fs};
 pub fn run(config: Config) -> Result<(), Box<dyn Error>> {
     let file_content = fs::read_to_string(config.filename)?;
     let mut i = 0;
-    let search_result = search::search(config.query, &file_content);
+    let search_result = if config.case_insensitive {
+        search::search_case_insensitive(config.query, &file_content)
+    } else {
+        search::search(config.query, &file_content)
+    };
 
     println!("Found {} results", search_result.len());
 
