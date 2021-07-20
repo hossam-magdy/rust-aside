@@ -1,10 +1,10 @@
-use std::{cmp, env};
+use std::env;
 
 #[derive(Debug, PartialEq)]
 pub struct Config<'a> {
     pub query: &'a String,
     pub filename: &'a String,
-    pub case_insensitive: bool,
+    pub case_sensitive: bool,
 }
 
 impl<'a> Config<'a> {
@@ -17,21 +17,12 @@ impl<'a> Config<'a> {
             .get(2)
             .ok_or("Could not extract Filename from the second argument")?;
 
-        let env_string = env::var("CASE_INSENSITIVE")
-            .unwrap_or("0".to_string())
-            .to_lowercase();
-
-        let case_insensitive = match &env_string[..(cmp::min(4, env_string.len()))] {
-            "1" => true,
-            "yes" => true,
-            "true" => true,
-            _ => false,
-        };
+        let case_sensitive = env::var("CASE_INSENSITIVE").is_err();
 
         Ok(Config {
             query,
             filename,
-            case_insensitive,
+            case_sensitive,
         })
     }
 }
