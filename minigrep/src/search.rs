@@ -1,26 +1,15 @@
 pub fn search<'a>(needle: &str, haystack: &'a str) -> Vec<&'a str> {
-    let mut results = Vec::new();
-
-    for line in haystack.lines() {
-        if line.contains(needle) {
-            results.push(line);
-        }
-    }
-
-    return results;
+    return haystack
+        .lines()
+        .filter(|line| line.contains(needle))
+        .collect();
 }
 
 pub fn search_case_insensitive<'a>(needle: &str, haystack: &'a str) -> Vec<&'a str> {
-    let mut results = Vec::new();
-    let needle = needle.to_lowercase();
-
-    for line in haystack.lines() {
-        if line.to_lowercase().contains(&needle) {
-            results.push(line);
-        }
-    }
-
-    return results;
+    return haystack
+        .lines()
+        .filter(|line| line.to_lowercase().contains(needle))
+        .collect();
 }
 
 #[cfg(test)]
