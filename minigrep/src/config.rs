@@ -1,21 +1,27 @@
 use std::env;
 
 #[derive(Debug, PartialEq)]
-pub struct Config<'a> {
-    pub query: &'a String,
-    pub filename: &'a String,
+pub struct Config {
+    pub query: String,
+    pub filename: String,
     pub case_sensitive: bool,
 }
 
-impl<'a> Config<'a> {
-    pub fn new(args: &[String]) -> Result<Config, &str> {
-        let query = args
-            .get(1)
-            .ok_or("Could not extract Search query from the first argument")?;
+impl Config {
+    pub fn new(mut args: env::Args) -> Result<Config, &'static str> {
+        args.next();
 
-        let filename = args
-            .get(2)
-            .ok_or("Could not extract Filename from the second argument")?;
+        let query = match args.next() {
+            Some(arg) => arg,
+            None => return Err("Could not extract Search query from the first argument"),
+        };
+        // .get(1).ok_or("Could not extract Search query from the first argument")?;
+
+        let filename = match args.next() {
+            Some(arg) => arg,
+            None => return Err("Could not extract Filename from the second argument"),
+        };
+        // .get(2).ok_or("Could not extract Filename from the second argument")?;
 
         let case_sensitive = env::var("CASE_INSENSITIVE").is_err();
 
