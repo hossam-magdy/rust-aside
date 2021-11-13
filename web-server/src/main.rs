@@ -8,7 +8,6 @@ fn main() {
 
     for stream in listener.incoming() {
         let stream = stream.unwrap();
-        // let c: i128;
 
         handle_connection(stream);
     }
@@ -16,16 +15,18 @@ fn main() {
 
 fn handle_connection(mut stream: TcpStream) {
     let mut buffer = [0; 1024];
-
     stream.read(&mut buffer).unwrap();
 
-    // println!("Request: {}", String::from_utf8_lossy(&buffer[..]));
+    let buffer_str = String::from_utf8_lossy(&buffer);
+    let http_line = buffer_str.lines().next().unwrap();
+    println!("Request: {}", http_line);
+
     let get = b"GET / HTTP/1.1\r\n";
 
     let (status_line, filename) = if buffer.starts_with(get) {
-        ("HTTP/1.1 200 OK", "hello.html")
+        ("HTTP/1.1 200 OK", "public/hello.html")
     } else {
-        ("HTTP/1.1 404 NOT FOUND", "404.html")
+        ("HTTP/1.1 404 NOT FOUND", "public/404.html")
     };
 
     let contents = fs::read_to_string(filename).unwrap();
