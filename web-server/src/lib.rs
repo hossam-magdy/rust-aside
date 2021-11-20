@@ -71,7 +71,9 @@ struct Worker {
 impl Worker {
   pub fn new(id: usize, receiver: SharedReceiver) -> Worker {
     let thread = thread::spawn(move || loop {
-      match receiver.lock().unwrap().recv().unwrap() {
+      let message = receiver.lock().unwrap().recv().unwrap();
+
+      match message {
         Message::NewJob(job) => {
           println!("Worker number {} is runinng a Job", id);
           job();
