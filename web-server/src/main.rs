@@ -4,24 +4,16 @@ use std::net::TcpListener;
 use std::net::TcpStream;
 use std::thread;
 use std::time::Duration;
+use web_server::ThreadPool;
 
 fn main() {
     let listener = TcpListener::bind("127.0.0.1:7878").unwrap();
+    let pool = ThreadPool::new(4);
 
     for stream in listener.incoming() {
         let stream = stream.unwrap();
 
-        /*
-         * We’ll eventually create a thread pool and limit the number of threads to a small number
-         * to protect us from Denial of Service (DoS) attacks
-         *
-         * Because if we had our program create a new thread for each request as it came in,
-         * someone making 10 million requests to our server could create havoc
-         * by using up all our server’s resources and grinding the processing of requests to a halt
-         *
-         * But: If We Could Spawn a Thread for Each Request, it will be like:
-         */
-        thread::spawn(|| {
+        pool.execute(|| {
             handle_connection(stream);
         });
     }
