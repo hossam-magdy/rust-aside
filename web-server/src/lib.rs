@@ -39,7 +39,9 @@ impl ThreadPool {
         F: FnOnce() -> () + Send + 'static,
     {
         let job = Box::new(f);
-        self.sender.send(Message::NewJob(job)).unwrap();
+        self.sender
+            .send(Message::NewJob(job))
+            .expect("Error sending Message::NewJob through channel ...");
     }
 }
 
@@ -48,7 +50,9 @@ impl Drop for ThreadPool {
         println!("Sending terminate message to all workers.");
 
         for _ in &self.workers {
-            self.sender.send(Message::Terminate).unwrap();
+            self.sender
+                .send(Message::Terminate)
+                .expect("Error sending Message::Terminate through channel/mpsc::Sender");
         }
 
         println!("Shutting down all workers.");
@@ -57,7 +61,7 @@ impl Drop for ThreadPool {
             println!("Shutting down worker {}", worker.id);
 
             if let Some(thread) = worker.thread.take() {
-                thread.join().unwrap();
+                thread.join().expect("Error joining thread ...");
             }
         }
     }
@@ -71,7 +75,11 @@ struct Worker {
 impl Worker {
     pub fn new(id: usize, receiver: SharedReceiver) -> Worker {
         let thread = thread::spawn(move || loop {
-            let message = receiver.lock().unwrap().recv().unwrap();
+            let message = receiver
+                .lock()
+                .expect("Error locking MutexGuard of channel (to exclusively read a single message in only one thread) ...")
+                .recv()
+                .expect("Error receiving Message from channel ...");
 
             match message {
                 Message::NewJob(job) => {
