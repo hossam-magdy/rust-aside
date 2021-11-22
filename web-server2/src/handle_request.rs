@@ -1,10 +1,8 @@
-use std::{
-    fs,
-    io::{Read, Write},
-    net::TcpStream,
-    thread,
-    time::Duration,
-};
+use std::fs;
+use std::io::{Read, Write};
+use std::net::TcpStream;
+use std::thread;
+use std::time::Duration;
 
 pub fn handle_request(mut stream: TcpStream) -> () {
     let mut buffer = [0u8; 1024];
@@ -18,7 +16,7 @@ pub fn handle_request(mut stream: TcpStream) -> () {
     let (status_line, filepath) = match request_http_line {
         "GET / HTTP/1.1" => ("HTTP/1.1 200 OK", "public/hello.html"),
         "GET /sleep HTTP/1.1" => {
-            thread::sleep(Duration::new(3, 0));
+            thread::sleep(Duration::from_secs(3));
             ("HTTP/1.1 404 NotFound", "public/404.html")
         }
         _ => ("HTTP/1.1 404 NotFound", "public/404.html"),

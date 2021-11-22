@@ -1,4 +1,6 @@
 mod job;
 mod message;
-pub mod thread_pool;
+mod thread_pool;
 mod worker;
+
+pub use thread_pool::ThreadPool;
