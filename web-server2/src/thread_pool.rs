@@ -5,20 +5,26 @@ use std::{
 
 type Job = Box<dyn FnOnce() -> () + Send + 'static>;
 
+enum Message {
+    NewJob(Job),
+    Terminate,
+}
+
 pub struct ThreadPool {
     workers: Vec<Worker>,
-    sender: mpsc::Sender<Job>,
+    sender: mpsc::Sender<Message>,
 }
 
 impl ThreadPool {
     pub fn new(size: usize) -> Self {
-        let mut workers = Vec::with_capacity(size);
+        println!("Creating ThreadPool of size {}", size);
 
         let (sender, receiver) = mpsc::channel();
         let receiver = Arc::new(Mutex::new(receiver));
 
+        let mut workers = Vec::with_capacity(size);
         for i in 0..size {
-            let worker = Worker::new(i, receiver.clone());
+            let worker = Worker::new(i, Arc::clone(&receiver));
             workers.push(worker);
         }
 
@@ -30,45 +36,39 @@ impl ThreadPool {
         F: FnOnce() + Send + 'static,
     {
         let job = Box::new(f);
-        self.sender.send(job).unwrap();
+        let message = Message::NewJob(job);
+        self.sender.send(message).unwrap();
     }
 }
 
 struct Worker {
     id: usize,
-    thread: thread::JoinHandle<()>,
+    thread: Option<thread::JoinHandle<()>>,
 }
 
 impl Worker {
-    fn new(id: usize, receiver: Arc<Mutex<mpsc::Receiver<Job>>>) -> Self {
+    fn new(id: usize, receiver: Arc<Mutex<mpsc::Receiver<Message>>>) -> Self {
         let thread = thread::spawn(move || loop {
-            println!("Handling request in thread {}", id);
-            let job = receiver
-              .lock()
-              .expect("Error locking MutexGuard of channel (to exclusively read a single message in only one thread) ...")
-              .recv()
-              .expect("Error receiving Message from channel ...");
+            let message = receiver
+            .lock()
+            .expect("Error locking MutexGuard of channel (to exclusively read a single message in only one thread) ...")
+            .recv()
+            .expect("Error receiving Message from channel ...");
 
-            job();
-            // let result_mutex = receiver.lock();
-
-            // match result_mutex {
-            //     Ok(mutex) => match mutex.recv() {
-            //         Ok(job) => {
-            //             job();
-            //         }
-            //         Err(error) => {
-            //             println!("ERROR in mutex.recv: {:?}", error);
-            //             panic!()
-            //         }
-            //     },
-            //     Err(error) => {
-            //         println!("ERROR in receiver.lock: {:?}", error);
-            //         panic!()
-            //     }
-            // }
+            match message {
+                Message::NewJob(job) => {
+                    println!("Worker number {} is runinng a Job", id);
+                    job();
+                }
+                Message::Terminate => {
+                    println!("Worker number {} is being terminated", id);
+                    break;
+                }
+            };
         });
-
-        Worker { id, thread }
+        Worker {
+            id,
+            thread: Some(thread),
+        }
     }
 }
