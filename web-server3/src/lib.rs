@@ -3,8 +3,15 @@ use std::sync::Arc;
 use std::sync::Mutex;
 use std::thread;
 
+enum Message {
+    NewTask(Task),
+    Terminate,
+}
+
+type Task = Box<dyn FnOnce() + Send + 'static>;
+
 pub struct ThreadPool {
-    sender: mpsc::Sender<Task>,
+    sender: mpsc::Sender<Message>,
     workers: Vec<Worker>,
 }
 
@@ -27,21 +34,45 @@ impl ThreadPool {
         F: FnOnce() + Send + 'static, // TODO
     {
         let task = Box::new(f);
-        self.sender.send(task).unwrap();
+        let message = Message::NewTask(task);
+        self.sender.send(message).unwrap();
     }
 }
 
-type Task = Box<dyn FnOnce() + Send + 'static>;
+impl Drop for ThreadPool {
+    fn drop(&mut self) {
+        for _ in &self.workers {
+            self.sender.send(Message::Terminate).unwrap();
+        }
 
-struct Worker {}
+        for worker in &mut self.workers {
+            worker.thread.take().unwrap().join().unwrap();
+        }
+    }
+}
+
+struct Worker {
+    thread: Option<thread::JoinHandle<()>>,
+}
 
 impl Worker {
-    pub fn new(id: usize, receiver: Arc<Mutex<mpsc::Receiver<Task>>>) -> Self {
-        thread::spawn(move || loop {
-            let task = receiver.lock().unwrap().recv().unwrap();
-            println!("Running task on thread {}", id);
-            task();
+    pub fn new(id: usize, receiver: Arc<Mutex<mpsc::Receiver<Message>>>) -> Self {
+        let thread = thread::spawn(move || loop {
+            let message = receiver.lock().unwrap().recv().unwrap();
+
+            match message {
+                Message::NewTask(task) => {
+                    println!("Running task on thread {}", id);
+                    task();
+                }
+                Message::Terminate => {
+                    println!("Terminating thread {}", id);
+                    break;
+                }
+            }
         });
-        Worker {}
+        Worker {
+            thread: Some(thread),
+        }
     }
 }
