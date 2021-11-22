@@ -1,9 +1,9 @@
-use crate::message::Message;
+use super::message::Message;
 
-use std::{
-    sync::{mpsc, Arc, Mutex},
-    thread,
-};
+use std::sync::mpsc;
+use std::sync::Arc;
+use std::sync::Mutex;
+use std::thread;
 
 pub struct Worker {
     pub id: usize,
