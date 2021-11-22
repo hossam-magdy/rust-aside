@@ -1,3 +1,5 @@
+# Questions during the secon implementatio of web-server:
+
 ```rust
 // is the stream mutable?
 
@@ -13,4 +15,13 @@ thread::spawn(move || {
 
 // Not sure about:
 // Arc reference
+
+// Why needed "&mut self" and ".take()"
+for worker in &mut self.workers {
+    if let Some(thread) = worker.thread.take() {
+        thread.join().unwrap();
+    }
+}
+
+// What if Drop is not implemented for ThreadPool?
 ```
