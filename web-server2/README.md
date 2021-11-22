@@ -9,4 +9,8 @@
 thread::spawn(move || {
   handle_request(&mut stream);
 });
+
+
+// Not sure about:
+// Arc reference
 ```
