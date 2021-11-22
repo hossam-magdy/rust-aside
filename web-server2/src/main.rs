@@ -1,4 +1,4 @@
-use std::net::TcpListener;
+use std::{net::TcpListener, thread};
 
 use web_server2::handle_request::handle_request;
 
@@ -10,6 +10,9 @@ fn main() {
     for stream in tcp_listener.incoming() {
         let mut stream = stream.unwrap();
 
-        handle_request(&mut stream);
+        // do we "move" in thread::spawn?
+        thread::spawn(move || {
+            handle_request(&mut stream);
+        });
     }
 }

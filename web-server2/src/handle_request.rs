@@ -8,10 +8,6 @@ use std::{
 };
 
 pub fn handle_request(mut stream: &TcpStream) -> () {
-    // is the stream mutable?
-    // can we pass non-referenced mut object?
-    // how was the buffer defined?
-
     let mut buffer = vec![0u8; 1024];
     stream.read(&mut buffer).unwrap();
     let buffer_str = from_utf8(&buffer[..]).unwrap();
