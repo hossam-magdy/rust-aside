@@ -2,15 +2,14 @@ use std::{
     fs,
     io::{Read, Write},
     net::TcpStream,
-    str::from_utf8,
     thread,
     time::Duration,
 };
 
-pub fn handle_request(mut stream: &TcpStream) -> () {
-    let mut buffer = vec![0u8; 1024];
+pub fn handle_request(mut stream: TcpStream) -> () {
+    let mut buffer = [0u8; 1024];
     stream.read(&mut buffer).unwrap();
-    let buffer_str = from_utf8(&buffer[..]).unwrap();
+    let buffer_str = std::str::from_utf8(&buffer[..]).unwrap();
 
     let request_http_line = buffer_str.lines().next().unwrap();
 

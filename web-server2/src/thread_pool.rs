@@ -17,8 +17,8 @@ impl ThreadPool {
         let (sender, receiver) = mpsc::channel();
         let receiver = Arc::new(Mutex::new(receiver));
 
-        for id in 0..size {
-            let worker = Worker::new(id, receiver.clone());
+        for i in 0..size {
+            let worker = Worker::new(i, receiver.clone());
             workers.push(worker);
         }
 

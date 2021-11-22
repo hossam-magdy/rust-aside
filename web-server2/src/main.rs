@@ -9,12 +9,12 @@ fn main() {
     let tcp_listener = TcpListener::bind(ADDRESS).unwrap();
 
     for stream in tcp_listener.incoming() {
-        let mut stream = stream.unwrap();
+        let stream = stream.unwrap();
         let pool = ThreadPool::new(4);
 
         // do we "move" in thread::spawn?
-        pool.execute(move || {
-            handle_request(&mut stream);
+        pool.execute(|| {
+            handle_request(stream);
         });
     }
 }
