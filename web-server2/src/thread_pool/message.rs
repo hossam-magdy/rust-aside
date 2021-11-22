@@ -1,4 +1,4 @@
-use super::job::Job;
+use super::Job;
 
 pub enum Message {
     NewJob(Job),

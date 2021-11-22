@@ -1,5 +1,5 @@
-use super::message::Message;
-use super::worker::Worker;
+use super::Message;
+use super::Worker;
 
 use std::sync::mpsc;
 use std::sync::Arc;

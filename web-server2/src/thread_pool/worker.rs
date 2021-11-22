@@ -1,4 +1,4 @@
-use super::message::Message;
+use super::Message;
 
 use std::sync::mpsc;
 use std::sync::Arc;
