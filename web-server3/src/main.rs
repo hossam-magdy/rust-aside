@@ -1,12 +1,10 @@
-use std::{
-    fs::read_to_string,
-    io::{Read, Write},
-    net::TcpListener,
-    thread,
-    time::Duration,
-};
-
 use web_server3::ThreadPool;
+
+use std::fs::read_to_string;
+use std::io::{Read, Write};
+use std::net::TcpListener;
+use std::thread;
+use std::time::Duration;
 
 static ADDRESS: &str = "127.0.0.1:7878";
 fn main() {
